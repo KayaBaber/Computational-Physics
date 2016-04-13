@@ -27,8 +27,8 @@ b=0.05
 omega=0.7
 
 #computation parameters
-steps=100*2
-periods=100
+steps=100
+periods=300
 t = np.linspace(0, periods*(math.pi*2.0*omega), steps*periods+1)
 
 #generating loop
@@ -39,10 +39,10 @@ for i in range(7):
     #ODE solution
     sol = odeint(f, thetas, t, args=(b, gamma, omega))
 
-    #TAKE THE STROBE
-
+    #Cut off data from before 200 driving periods
+  
     #plot theta vs time
-    plt.plot(t, sol[:, 1], 'b', label='thetaDot(t)')
+    plt.plot(t[200*steps:], sol[:, 1][200*steps:], 'b', label='thetaDot(t)')
     plt.xlabel('time')
     plt.ylabel('theta-Dot')
     plt.grid()
