@@ -4,50 +4,84 @@ Physics 440 - Computational Physics
 Assignment 3
 Problem 2
 '''
+from scipy.integrate import odeint
 import numpy as np
 import matplotlib.pyplot as plt
 import math
 
-
-def forced_damped_pendulum_sim(theta0, thetaDot0, b, omega, gamma, steps, stepSize): 
-    thetaLog=[theta0] 
-    thetaDotLog=[thetaDot0]
-    timeLog=[0.0]
-
-    #Forward Euler step
-    thetaDouble0=-b*thetaDot0 - math.sin(theta0) + gamma*math.cos(omega*stepSize)
-    theta = theta0 + stepSize*thetaDot0
-    thetaDot = thetaDot0 + stepSize*thetaDouble0
+def f(thetas, t, b, gamma, omega):
+    #pendulum driven-damped function
+    theta=thetas[0]
+    thetaDot=thetas[1]
+    thetaDouble=-b*thetaDot - math.sin(theta) + gamma*math.cos(omega*t)
+    return thetaDot, thetaDouble
     
-    thetaLog.append(theta)
-    thetaDotLog.append(thetaDot)
 
-    #LeapFrog Loop
-    for i in range(1,steps-1):
-        theta = thetaLog[-2] + 2.0*stepSize*thetaDotLog[-1]
-        thetaDouble=-b*thetaDot - math.sin(theta) + gamma*math.cos(omega*i*stepSize)
-        thetaDot = thetaDotLog[-2] + 2.0*stepSize*thetaDouble
-        
-        timeLog.append(i*stepSize)
-        thetaLog.append(theta)
-        thetaDotLog.append(thetaDot)
-    timeLog.append(steps*stepSize)    
-    return thetaLog, thetaDotLog, timeLog
+#initial conditions
+theta0=-0.0
+thetaDot0=0.0
+thetas=[theta0,thetaDot0]
 
-
-
-
-
-theta0=-0.1
-thetaDot0=0.1
-b=0.0
+#constants
+b=0.05
 omega=0.7
-gamma=0.0
-steps=100*100
-stepSize=1.0/1000.0
 
+#computation parameters
+steps=100*2
+periods=100
+t = np.linspace(0, periods*(math.pi*2.0*omega), steps*periods+1)
 
-thetaLog, thetaDotLog, timeLog = forced_damped_pendulum_sim(theta0, thetaDot0, b, omega, gamma, steps, stepSize)
-plt.plot(timeLog,thetaLog)
-plt.show()
+#generating loop
+for i in range(7):
+
+    gamma=0.4+(i*0.1)
+
+    #ODE solution
+    sol = odeint(f, thetas, t, args=(b, gamma, omega))
+
+    #TAKE THE STROBE
+
+    #plot theta vs time
+    plt.plot(t, sol[:, 1], 'b', label='thetaDot(t)')
+    plt.xlabel('time')
+    plt.ylabel('theta-Dot')
+    plt.grid()
+    plt.savefig('/Users/student/kbaber/Desktop/Phys440/Assignment 3/plots//gamma'+str(gamma)+'_thetaDot_t.png',bbox_inches='tight')
+    #plt.savefig('\Users\Kaya\Google Drive\School\Phys 440\Assignments\Assignment 3\plots\\gamma'+str(gamma)+'_thetaDot_t.png',bbox_inches='tight')
+    #plt.show()
+    plt.clf()
+
+    #clips the plot to keep theta between -pi and +pi
+    thetaLog=((np.array(sol[:,0])+math.pi)%(2*math.pi))-math.pi
+    #plot phase space plot
+    plt.plot(thetaLog, sol[:, 1], 'g.', label='theta-Dot(theta)')
+    plt.xlabel('theta')
+    plt.ylabel('theta-Dot')
+    plt.title('Phase Space Plot')
+    plt.grid()
+    plt.gca().set_aspect('equal', adjustable='box')
+    plt.savefig('/Users/student/kbaber/Desktop/Phys440/Assignment 3/plots//gamma'+str(gamma)+'_thetaDot_theta.png',bbox_inches='tight')
+    #plt.savefig('\Users\Kaya\Google Drive\School\Phys 440\Assignments\Assignment 3\plots\\gamma'+str(gamma)+'_thetaDot_theta.png',bbox_inches='tight')
+    #plt.show()
+    plt.clf()
+    
+    
+    
+    #selects only points that coincide with the period omega
+    strobedTheta=sol[:,0][0:-1:steps]
+    strobedThetaDot=sol[:,1][0:-1:steps]
+    strobedTheta=((strobedTheta+math.pi)%(2*math.pi))-math.pi
+    #plot strobed phase space plot
+    plt.plot(strobedTheta, strobedThetaDot, 'r.', label='theta-Dot(theta)')
+    plt.xlabel('theta')
+    plt.ylabel('theta-Dot')
+    plt.title('Strobed Phase Space Plot')
+    plt.grid()
+    plt.gca().set_aspect('equal', adjustable='box')
+    plt.savefig('/Users/student/kbaber/Desktop/Phys440/Assignment 3/plots//gamma'+str(gamma)+'_thetaDot_theta_strobed.png',bbox_inches='tight')
+    #plt.savefig('\Users\Kaya\Google Drive\School\Phys 440\Assignments\Assignment 3\plots\\gamma'+str(gamma)+'_thetaDot_theta.png',bbox_inches='tight')
+    #plt.show()
+    plt.clf()
+    
+    
 
