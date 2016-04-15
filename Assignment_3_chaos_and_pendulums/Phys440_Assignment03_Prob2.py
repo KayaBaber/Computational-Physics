@@ -46,8 +46,8 @@ for i in range(7):
     plt.xlabel('time')
     plt.ylabel('theta-Dot')
     plt.grid()
-    plt.savefig('/Users/student/kbaber/Desktop/Phys440/Assignment 3/plots//gamma'+str(gamma)+'_thetaDot_t.png',bbox_inches='tight')
-    #plt.savefig('\Users\Kaya\Google Drive\School\Phys 440\Assignments\Assignment 3\plots\\gamma'+str(gamma)+'_thetaDot_t.png',bbox_inches='tight')
+    plt.savefig('plots/gamma'+str(gamma)+'_thetaDot_t.png',bbox_inches='tight')
+    #plt.savefig('plots\\gamma'+str(gamma)+'_thetaDot_t.png',bbox_inches='tight')
     #plt.show()
     plt.clf()
 
@@ -60,8 +60,8 @@ for i in range(7):
     plt.title('Phase Space Plot')
     plt.grid()
     plt.gca().set_aspect('equal', adjustable='box')
-    plt.savefig('/Users/student/kbaber/Desktop/Phys440/Assignment 3/plots//gamma'+str(gamma)+'_thetaDot_theta.png',bbox_inches='tight')
-    #plt.savefig('\Users\Kaya\Google Drive\School\Phys 440\Assignments\Assignment 3\plots\\gamma'+str(gamma)+'_thetaDot_theta.png',bbox_inches='tight')
+    plt.savefig('plots/gamma'+str(gamma)+'_thetaDot_theta.png',bbox_inches='tight')
+    #plt.savefig('plots\\gamma'+str(gamma)+'_thetaDot_theta.png',bbox_inches='tight')
     #plt.show()
     plt.clf()
     
@@ -78,8 +78,8 @@ for i in range(7):
     plt.title('Strobed Phase Space Plot')
     plt.grid()
     plt.gca().set_aspect('equal', adjustable='box')
-    plt.savefig('/Users/student/kbaber/Desktop/Phys440/Assignment 3/plots//gamma'+str(gamma)+'_thetaDot_theta_strobed.png',bbox_inches='tight')
-    #plt.savefig('\Users\Kaya\Google Drive\School\Phys 440\Assignments\Assignment 3\plots\\gamma'+str(gamma)+'_thetaDot_theta.png',bbox_inches='tight')
+    plt.savefig('plots/gamma'+str(gamma)+'_thetaDot_theta_strobed.png',bbox_inches='tight')
+    #plt.savefig('plots\\gamma'+str(gamma)+'_thetaDot_theta.png',bbox_inches='tight')
     #plt.show()
     plt.clf()
     
