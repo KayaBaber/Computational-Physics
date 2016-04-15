@@ -28,7 +28,7 @@ omega=0.7
 
 #computation parameters
 steps=100
-periods=300
+periods=310
 t = np.linspace(0, periods*(math.pi*2.0*omega), steps*periods+1)
 
 #generating loop
@@ -42,7 +42,7 @@ for i in range(7):
     #Cut off data from before 200 driving periods
   
     #plot theta vs time
-    plt.plot(t[200*steps:], sol[:, 1][200*steps:], 'b', label='thetaDot(t)')
+    plt.plot(t[210*steps:], sol[:, 1][210*steps:], 'b', label='thetaDot(t)')
     plt.xlabel('time')
     plt.ylabel('theta-Dot')
     plt.grid()
@@ -52,9 +52,9 @@ for i in range(7):
     plt.clf()
 
     #clips the plot to keep theta between -pi and +pi
-    thetaLog=((np.array(sol[:,0])+math.pi)%(2*math.pi))-math.pi
+    thetaLog=((np.array(sol[:,0][210*steps:])+math.pi)%(2*math.pi))-math.pi
     #plot phase space plot
-    plt.plot(thetaLog, sol[:, 1], 'g.', label='theta-Dot(theta)')
+    plt.plot(thetaLog, sol[:, 1][210*steps:], 'g.', label='theta-Dot(theta)')
     plt.xlabel('theta')
     plt.ylabel('theta-Dot')
     plt.title('Phase Space Plot')
@@ -68,8 +68,8 @@ for i in range(7):
     
     
     #selects only points that coincide with the period omega
-    strobedTheta=sol[:,0][0:-1:steps]
-    strobedThetaDot=sol[:,1][0:-1:steps]
+    strobedTheta=sol[:,0][210*steps:-1:steps]
+    strobedThetaDot=sol[:,1][210*steps:-1:steps]
     strobedTheta=((strobedTheta+math.pi)%(2*math.pi))-math.pi
     #plot strobed phase space plot
     plt.plot(strobedTheta, strobedThetaDot, 'r.', label='theta-Dot(theta)')
