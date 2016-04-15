@@ -2,7 +2,7 @@
 Kaya Baber
 Physics 440 - Computational Physics
 Assignment 3
-Problem 1b
+Problem 1
 '''
 import numpy as np
 import matplotlib.pyplot as plt
@@ -14,8 +14,8 @@ def pendulum_sim(theta0, momen0, steps, stepSize):
     momenLog=[momen0]
 
     #Forward Euler step
-    theta = theta0 + stepSize*momen0
-    momen = momen0 - stepSize*math.sin(theta0)
+    theta = theta0 + 2.0*stepSize*momen0
+    momen = momen0 - 2.0*stepSize*math.sin(theta0)
     thetaLog.append(theta)
     momenLog.append(momen)
 
@@ -30,24 +30,22 @@ def pendulum_sim(theta0, momen0, steps, stepSize):
     
     
     
-
-stepSize=1.0/1000.0
+    
+theta0=0
+momen0=2.0
+stepSize=1.0/100.0
 steps=100*100
-resolution=10
-for i in range(resolution):
-    for j in range(resolution): 
-        theta0=-3.0 + i*6.0/float(resolution)
-        momen0=-3.0 + j*6.0/float(resolution)
-        thetaLog, momenLog = pendulum_sim(theta0, momen0, steps, stepSize)
-        thetaLog=((np.array(thetaLog)+math.pi)%(2*math.pi))-math.pi
-        plt.plot(thetaLog,momenLog,'.b')
-plt.title('Phase Space Plot')
-plt.ylabel('Momentum')
-plt.xlabel('Theta (radians)')
-plt.show()
+
+thetaLog, momenLog = pendulum_sim(theta0, momen0, steps, stepSize)
 #plt.plot(range(steps),thetaLog)
 #plt.title('Theta')
 #plt.show()
 #plt.plot(range(steps),momenLog)
 #plt.title('Momentum')
 #plt.show()
+
+plt.plot(thetaLog,momenLog)
+plt.title('Phase Space Plot')
+plt.ylabel('Momentum')
+plt.xlabel('Theta (radians)')
+plt.show()
