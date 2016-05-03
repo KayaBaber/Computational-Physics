@@ -32,7 +32,7 @@ def pendulum_sim(theta0, momen0, steps, stepSize):
     
 
 stepSize=1.0/1000.0
-steps=100*20
+steps=100*20*3
 resolution=10
 for i in range(resolution):
     for j in range(resolution): 
@@ -41,9 +41,11 @@ for i in range(resolution):
         thetaLog, momenLog = pendulum_sim(theta0, momen0, steps, stepSize)
         thetaLog=((np.array(thetaLog)+math.pi)%(2*math.pi))-math.pi
         plt.plot(thetaLog[0],momenLog[0],'ob')
+        plt.plot(thetaLog[steps/3],momenLog[steps/3],'og')
+        plt.plot(thetaLog[2*steps/3],momenLog[2*steps/3],'oy')
         plt.plot(thetaLog[-1],momenLog[-1],'or')
         plt.gca().set_aspect('equal', adjustable='box')
-plt.title('Phase Space Plot - Liouville Demonstration')
+plt.title('Phase Space Plot-Liouville Demonstration')
 plt.ylabel('Momentum')
 plt.xlabel('Theta (radians)')
 plt.show()
