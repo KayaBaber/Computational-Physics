@@ -20,10 +20,11 @@ import matplotlib.pyplot as plt
 
 
 def make_banded(N):
-    N-=2
-    stepSize = 1.0/N
+    N-=2    #we reduce N by 2 because we aren't using the outer ring of indicies
+    stepSize = 0.01/N
     bandTopBot = [1.0/ (stepSize**2)]*(N-1)
     bandMid = [-2.0/ (stepSize**2)]*N
+    
     banded = np.diag(bandMid)
     banded = np.add(banded,np.diag(bandTopBot,1))
     banded = np.add(banded,np.diag(bandTopBot,-1))
@@ -45,6 +46,8 @@ for i in range(25):
     #print eiganVect[0]
     #print psi
     plt.plot(xArray, psi)
+    plt.ylabel("Eigan Vector")
+    plt.xlabel("Position (x)")
     plt.grid()
     plt.savefig('plots/eiganVect'+str(i)+'.png',bbox_inches='tight')
     #plt.show()
