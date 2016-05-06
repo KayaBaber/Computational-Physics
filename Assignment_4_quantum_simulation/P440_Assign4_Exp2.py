@@ -46,31 +46,48 @@ def make_banded(N):
 def normalize(psi):
     #takes in eigan vector and normalizes it
     psiSqr = psi**2         
-    psiSqrSum = np.sum(psiSqr)
+    psiSqrSum = np.sum(psiSqr) / (2.* (len(psi)-1) )
     normConst = psiSqrSum ** (1./2.)
     psiNorm = psi / normConst
     return psiNorm
+
+def V(x,V0):
+    vOut = V0*exp(-256*(x**2))
+    return vOut
+
+
+def perturb(psi,x,V(x,V0)):
+    psiSqr = psi**2
+    for pS in psiSqr:
+        pS = s
     
-    
-    
+
 
 N=100
 banded = make_banded(N)
 
-xArray=np.linspace(-0.5,0.5,N)  #positions
-xArraySub=xArray[1:-1]          #cut first and last point
+x=np.linspace(-0.5,0.5,N)           #positions
 
-eiganVal, eiganVect=LA.eig(banded)
+eiganVal, eiganVect=LA.eig(banded)  #compute eigan vectors and values
 
 num_vectors = 25
 
 psiArray=[]
 deltaEArray=[]
-for i in range(num_vectors):
+for i in range(num_vectors):        #constructs array of eigan vectors
     psi=np.insert(eiganVect[:,i],0 ,0)
     psi=np.append(psi,0)
     psi=normalize(psi)
     psiArray.append(psi)
+    
+psiNormArray=[]
+for p in psiArray:
+    psiNorm = normalize(p)
+    psiNormArray.append(psiNorm)
+    
+
+
+
     
 
 
