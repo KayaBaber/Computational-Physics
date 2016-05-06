@@ -33,7 +33,7 @@ import matplotlib.pyplot as plt
 
 def make_banded(N):
     N-=2    #we reduce N by 2 because we aren't using the outer ring of indicies
-    stepSize = 1.0/N
+    stepSize = 1.0/N  
     bandTopBot = [1.0/ (stepSize**2)]*(N-1)
     bandMid = [-2.0/ (stepSize**2)]*N
     
@@ -44,19 +44,21 @@ def make_banded(N):
 
 
 def normalize(psi):
-    psiSqr = psi**2
+    #takes in eigan vector and normalizes it
+    psiSqr = psi**2         
     psiSqrSum = np.sum(psiSqr)
     normConst = psiSqrSum ** (1./2.)
     psiNorm = psi / normConst
-    return psi
+    return psiNorm
+    
     
     
 
 N=100
 banded = make_banded(N)
 
-xArray=np.linspace(-0.5,0.5,N)
-xArraySub=xArray[1:-1]
+xArray=np.linspace(-0.5,0.5,N)  #positions
+xArraySub=xArray[1:-1]          #cut first and last point
 
 eiganVal, eiganVect=LA.eig(banded)
 
