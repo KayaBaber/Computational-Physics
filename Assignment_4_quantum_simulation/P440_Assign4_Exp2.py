@@ -75,16 +75,15 @@ for p in psiArray:
     psiNormArray.append(psiNorm)
 
 
-for i in range(numVectors):
+for i in range(40,numVectors):
     psi=np.insert(eiganVect[:,i],0 ,0)
     psi=np.append(psi,0)
-    print eiganVal
     plt.plot(x, psi)
     plt.ylabel("Psi")
     plt.xlabel("Position (x)")
     plt.title("Unperturbed")
     plt.grid()
-    plt.savefig('Assignment_4_quantum_simulation/plots/eiganVect'+str(i)+'.png',bbox_inches='tight')
+    plt.savefig('Assignment_4_quantum_simulation/plots/1eiganVect'+str(i)+'.png',bbox_inches='tight')
     #plt.show()
     plt.clf()
     
@@ -104,8 +103,9 @@ for i in xArraySub:
 Vdiag=np.diag(vArray)
 H = np.add(Vdiag,banded)
 eiganValH, eiganVect=LA.eig(H)
+eiganVect[:,40] = - eiganVect[:,40]
 psiArray=[]
-for i in range(numVectors):             #constructs array of eigan vectors
+for i in range(40,numVectors):             #constructs array of eigan vectors
     psi=np.insert(eiganVect[:,i],0 ,0)
     psi=np.append(psi,0)
     psi=normalize(psi)
@@ -137,7 +137,7 @@ Vdiag=np.diag(vArray)
 H = np.add(Vdiag,banded)
 eiganValH2, eiganVect=LA.eig(H)
 psiArray=[]
-for i in range(numVectors):             #constructs array of eigan vectors
+for i in range(40,numVectors):             #constructs array of eigan vectors
     psi=np.insert(eiganVect[:,i],0 ,0)
     psi=np.append(psi,0)
     psi=normalize(psi)
@@ -153,11 +153,15 @@ for i in range(numVectors):             #constructs array of eigan vectors
     
     
     
-print "V0 = 10 % of Groundstate\nPertubation Theory"
+print "V0 = 10 % of Groundstate\nPertubation Theory:"
 print np.array(newEnergy[40:])
-print "Computed"
+print "Computed:"
 print eiganValH[40:50]
-print "V0 = Groundstate\nPertubation Theory"
+print "Difference:"
+print np.substract(np.array(newEnergy[40:]),eiganValH[40:50])
+print "V0 = Groundstate\nPertubation Theory:"
 print np.array(newEnergy2[40:])
-print "Computed"
+print "Computed:"
 print eiganValH2[40:50]
+print "Difference:"
+print np.subtract(np.array(newEnergy2[40:]),eiganValH2[40:50])
