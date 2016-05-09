@@ -11,8 +11,8 @@ import matplotlib.pyplot as plt
 import math
 
 def make_banded(N):
+    stepSize = 1.0/N 
     N-=2                                 #we reduce N by 2 because we aren't using the outer ring of indicies
-    stepSize = 1.0/N  
     bandTopBot = [1.0/ (stepSize**2)]*(N-1)
     bandMid = [-2.0/ (stepSize**2)]*N
     
@@ -52,14 +52,14 @@ def perturb(psi,x,V,V0):
     return deltaE
 
 
-N=100
+N=65
 banded = make_banded(N)
 x=np.linspace(-0.5,0.5,N)               #positions
 xArraySub=x[1:-1]
 
 eiganVal, eiganVect=LA.eig(banded)      #compute eigan vectors and values
 
-numVectors = 25
+numVectors = 50
 
 psiArray=[]
 deltaEArray=[]
@@ -73,11 +73,23 @@ psiNormArray=[]
 for p in psiArray:
     psiNorm = normalize(p)
     psiNormArray.append(psiNorm)
-    
-    
-    
 
-V0=eiganVal[2] / 10.0
+
+for i in range(numVectors):
+    psi=np.insert(eiganVect[:,i],0 ,0)
+    psi=np.append(psi,0)
+    print eiganVal
+    plt.plot(x, psi)
+    plt.ylabel("Psi")
+    plt.xlabel("Position (x)")
+    plt.title("Unperturbed")
+    plt.grid()
+    plt.savefig('Assignment_4_quantum_simulation/plots/eiganVect'+str(i)+'.png',bbox_inches='tight')
+    #plt.show()
+    plt.clf()
+    
+ 
+V0=eiganVal[40] / 10.0          #GROUND STATE CHANGES WITH N, RECHECK EACH TIME
 deltaEArray
 for p in psiNormArray:
     deltaE=perturb(p,x,V,V0)
@@ -100,8 +112,9 @@ for i in range(numVectors):             #constructs array of eigan vectors
     psi=normalize(psi)
     psiArray.append(psi)
     plt.plot(x, psi)
-    plt.ylabel("Eigan Vector")
+    plt.ylabel("Psi")
     plt.xlabel("Position (x)")
+    plt.title("V_0 = 10% of Ground State Energy")
     plt.grid()
     plt.savefig('Assignment_4_quantum_simulation/plots/2AeiganVect'+str(i)+'.png',bbox_inches='tight')
     #plt.show()
@@ -110,7 +123,7 @@ for i in range(numVectors):             #constructs array of eigan vectors
 
 
 
-V0=eiganVal[2]
+V0=eiganVal[40]                 #GROUND STATE CHANGES WITH N, RECHECK EACH TIME
 deltaEArray=[]
 for p in psiNormArray:
     deltaE=perturb(p,x,V,V0)
@@ -131,8 +144,9 @@ for i in range(numVectors):             #constructs array of eigan vectors
     psi=normalize(psi)
     psiArray.append(psi)
     plt.plot(x, psi)
-    plt.ylabel("Eigan Vector")
+    plt.ylabel("Psi")
     plt.xlabel("Position (x)")
+    plt.title("V_0 = Ground State Energy")
     plt.grid()
     plt.savefig('Assignment_4_quantum_simulation/plots/2BeiganVect'+str(i)+'.png',bbox_inches='tight')
     #plt.show()
