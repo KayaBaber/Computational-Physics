@@ -94,9 +94,8 @@ deltaEArray
 for p in psiNormArray:
     deltaE=perturb(p,x,V,V0)
     deltaEArray.append(deltaE)
-print eiganVal[:numVectors]
 newEnergy = np.add(deltaEArray,eiganVal[:numVectors])
-print np.array(newEnergy)
+
 
 
 vArray=[]
@@ -128,15 +127,15 @@ deltaEArray=[]
 for p in psiNormArray:
     deltaE=perturb(p,x,V,V0)
     deltaEArray.append(deltaE)
-newEnergy = np.add(deltaEArray,eiganVal[:numVectors])
-print np.array(newEnergy)
+newEnergy2 = np.add(deltaEArray,eiganVal[:numVectors])
+
 
 vArray=[]
 for i in xArraySub:
     vArray.append(V(i,V0))
 Vdiag=np.diag(vArray)
 H = np.add(Vdiag,banded)
-eiganValH, eiganVect=LA.eig(H)
+eiganValH2, eiganVect=LA.eig(H)
 psiArray=[]
 for i in range(numVectors):             #constructs array of eigan vectors
     psi=np.insert(eiganVect[:,i],0 ,0)
@@ -151,3 +150,14 @@ for i in range(numVectors):             #constructs array of eigan vectors
     plt.savefig('Assignment_4_quantum_simulation/plots/2BeiganVect'+str(i)+'.png',bbox_inches='tight')
     #plt.show()
     plt.clf()
+    
+    
+    
+print "V0 = 10 % of Groundstate\nPertubation Theory"
+print np.array(newEnergy[40:])
+print "Computed"
+print eiganValH[40:50]
+print "V0 = Groundstate\nPertubation Theory"
+print np.array(newEnergy2[40:])
+print "Computed"
+print eiganValH2[40:50]
