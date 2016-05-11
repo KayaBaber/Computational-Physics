@@ -20,6 +20,7 @@ import math
 #replace boundaries of the column vector with [1+sin(2*pi*t)] and [1]
 #repeat for number of timesteps
 
+
 def make_banded(N,M):
     bandTopBot = [-1.]*(N-1)
     bandMid = [2. + (4.*M)/(N**2) ]*N
@@ -38,7 +39,10 @@ def make_operator(N,M):
     operatorCrank = invertedCrank.dot(negativeCrank)
     return operatorCrank
 
-
+def operator(opertorCrank,thermal):
+    
+    
+    return newThermal
 
 N = 10          #number of spatial steps per skin depth       
 M = 100         #number of temporal steps per period
