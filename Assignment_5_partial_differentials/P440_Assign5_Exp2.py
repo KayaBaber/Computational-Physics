@@ -14,20 +14,23 @@ import cmath
 
 
 L = 2.*math.pi  #set the x range to (0->2pi)
-N = 1000        #number of spatial intervals and points (since it loops)
+N = 10        #number of spatial intervals and points (since it loops)
 steps = 1000    #number of timesteps
 stepSize = 0.1  #temporal step size
 
-#make initial velocity array in real space
+#make initial velocity array in physical space
 velPhysGauss = np.exp(-10 * ( (np.linspace(0,L,N+1)[:-1]-math.pi) ** 2)) + [0J]*N
 
-#make initial density array in real space
+#make initial density array in physical space
 denPhysFlat = [0 + 0J]*N
-print denPhysFlat
-print denPhysFlat[2]+2.
-#fft both to fourier space
-#make a column vector of density_f appended to velocity_f
 
+#fft both to fourier space
+velF = np.fft.fft(velPhysGauss)
+denF = np.fft.fft(denPhysFlat)
+
+#make a column vector of density_f appended to velocity_f
+velDen = velF
+velDen = np.append(velDen,denF)
 #make derivative operator matrix
     #i(diag (0,1,2,3,4,.. -4, -3, -2, -1)), where i is imaginary i
 #make quad matrix [[I][op],[op][I]] and negative quad [[I][-op],[-op][I]]
