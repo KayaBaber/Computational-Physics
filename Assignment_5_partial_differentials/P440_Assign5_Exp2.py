@@ -9,6 +9,7 @@ import numpy as np
 from numpy import linalg as LA
 import matplotlib.pyplot as plt
 from mpl_toolkits.mplot3d import Axes3D
+from matplotlib import cm
 import math
 
 def make_quad_ops(N,stepSize):
@@ -37,19 +38,19 @@ def step_forward(velDen,posQuad,negQuad):
 
 
 L = 2.*math.pi  #set the x range to (0->2pi)
-N = 30*2        #number of spatial intervals and points (since it loops)
-steps = 10    #number of timesteps
-stepSize = 0.1  #temporal step size
+N = 100        #number of spatial intervals and points (since it loops)
+steps = 100*5    #number of timesteps
+stepSize = 0.01  #temporal step size
 
 #make initial velocity array in physical space
-velPhysGauss = np.exp(-10 * ( (np.linspace(0,L,N+1)[:-1]-math.pi) ** 2)) + [0J]*N
+velPhysFlat = [0 + 0J]*N
 
 #make initial density array in physical space
-denPhysFlat = [0 + 0J]*N
+denPhysGauss = np.exp(-10 * ( (np.linspace(0,L,N+1)[:-1]-math.pi) ** 2)) + [0J]*N
 
 #fft both to fourier space
-velF = np.fft.fft(velPhysGauss)
-denF = np.fft.fft(denPhysFlat)
+velF = np.fft.fft(velPhysFlat)
+denF = np.fft.fft(denPhysGauss)
 
 #make a column vector of density_f appended to velocity_f
 velDen = velF
@@ -79,12 +80,30 @@ ax = fig.add_subplot(111, projection='3d')
 x = np.linspace(0,L,N)
 y = np.linspace(0,steps*stepSize,steps)
 XX, YY = np.meshgrid(x,y)
+ZZ = velLog
+ax.plot_surface(XX, YY, ZZ, 
+                #cmap=cm.spectral
+               )
+ax.set_xlabel('Space')
+ax.set_ylabel('Time')
+ax.set_zlabel('Velocity')
+plt.show()
+
+
+fig = plt.figure()
+ax = fig.add_subplot(111, projection='3d')
+x = np.linspace(0,L,N)
+y = np.linspace(0,steps*stepSize,steps)
+XX, YY = np.meshgrid(x,y)
 ZZ = denLog
-ax.plot_surface(XX, YY, ZZ)
+ax.plot_surface(XX, YY, ZZ, 
+                #cmap=cm.spectral
+               )
 ax.set_xlabel('Space')
 ax.set_ylabel('Time')
 ax.set_zlabel('Density')
 plt.show()
+
 #maybe make an animation
 
 
