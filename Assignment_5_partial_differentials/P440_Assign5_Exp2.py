@@ -8,8 +8,8 @@ Exploration 2 - Parabolic PDEs: The Wave Equation
 import numpy as np
 from numpy import linalg as LA
 import matplotlib.pyplot as plt
+from mpl_toolkits.mplot3d import Axes3D
 import math
-import cmath
 
 def make_quad_ops(N,stepSize):
     iden = np.identity(N)
@@ -37,8 +37,8 @@ def step_forward(velDen,posQuad,negQuad):
 
 
 L = 2.*math.pi  #set the x range to (0->2pi)
-N = 2*2        #number of spatial intervals and points (since it loops)
-steps = 1000    #number of timesteps
+N = 30*2        #number of spatial intervals and points (since it loops)
+steps = 10    #number of timesteps
 stepSize = 0.1  #temporal step size
 
 #make initial velocity array in physical space
@@ -68,13 +68,23 @@ for i in range(steps):
     #inverse FFT the components and append the real parts of velocity and density to a log
     vel = np.fft.ifft(velF)
     den = np.fft.ifft(denF)
-    velLog.append(vel)
-    denLog.append(den)
+    velLog.append(vel.real)
+    denLog.append(den.real)
     #step forward
     velDen = step_forward(velDen,posQuad,negQuad)
 
-
 #plot the velocity and density logs in 3D
+fig = plt.figure()
+ax = fig.add_subplot(111, projection='3d')
+x = np.linspace(0,L,N)
+y = np.linspace(0,steps*stepSize,steps)
+XX, YY = np.meshgrid(x,y)
+ZZ = denLog
+ax.plot_surface(XX, YY, ZZ)
+ax.set_xlabel('Space')
+ax.set_ylabel('Time')
+ax.set_zlabel('Density')
+plt.show()
 #maybe make an animation
 
 
