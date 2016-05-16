@@ -8,6 +8,8 @@ Exploration 1 - Parabolic PDEs: Thermal Diffusion
 import numpy as np
 from numpy import linalg as LA
 import matplotlib.pyplot as plt
+from mpl_toolkits.mplot3d import Axes3D
+from matplotlib import cm
 import math
 
 #make banded matrix
@@ -39,18 +41,34 @@ def make_operator(N,M):
     operatorCrank = invertedCrank.dot(negativeCrank)
     return operatorCrank
 
-def operator(opertorCrank,thermal):
-    
-    
-    return newThermal
 
 N = 10          #number of spatial steps per skin depth       
 M = 100         #number of temporal steps per period
-periods = 100   #number of periods
+periods = 1   #number of periods
 skins = 10      #number of skin depths
 
 
-operatorCrank = make_operator(N,M)
+operatorCrank = make_operator(N*skins,M)
 thermal = [1.]*N*skins
-print thermal
-#banded.dot(thermalArray)
+
+#simulation loop
+thermLog = []
+for i in range(M*periods):
+    thermLog.append(thermal)
+    thermal = np.dot(operatorCrank,thermal)
+
+
+fig = plt.figure()
+ax = fig.add_subplot(111, projection='3d')
+x = np.linspace(0,skins,N*skins)
+y = np.linspace(0,periods,M*periods)
+XX, YY = np.meshgrid(x,y)
+ZZ = thermLog
+print ZZ
+ax.plot_surface(XX, YY, ZZ, 
+                #cmap=cm.spectral
+               )
+ax.set_xlabel('Space')
+ax.set_ylabel('Time')
+ax.set_zlabel('Temperature')
+plt.show()
