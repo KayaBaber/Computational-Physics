@@ -13,6 +13,8 @@ import cmath
 
 def make_quad_ops(N):
     iden = np.identity(N)
+    #make derivative operator matrix
+    #i(diag (0,1,2,3,4,.. -4, -3, -2, -1)), where i is imaginary i
     opFlat = np.append(np.linspace(0,N/2, (N/2)+1)*1J,
                        np.linspace((-N/2)+1,0,(N/2))[:-1]*1J)
     opDiag = np.diag(opFlat)
@@ -24,7 +26,15 @@ def make_quad_ops(N):
     negQuad = np.append(negTop, negBot, axis=0)
     return posQuad, negQuad
 
-print make_quad_ops(4)[1]
+
+def step_forward(velDen,posQuad,negQuad):
+    #matrix multiply the negative quad by the FFT column vector
+    RHS = np.dot(negQuad,velDen)
+    #linear algebra solve the pos_quad*newFFTvector = above-result for newFFTvector
+    solution = LA.tensorsolve(posQuad,RHS)
+    return solution
+
+
 
 L = 2.*math.pi  #set the x range to (0->2pi)
 N = 10        #number of spatial intervals and points (since it loops)
@@ -44,14 +54,14 @@ denF = np.fft.fft(denPhysFlat)
 #make a column vector of density_f appended to velocity_f
 velDen = velF
 velDen = np.append(velDen,denF)
-#make derivative operator matrix
-    #i(diag (0,1,2,3,4,.. -4, -3, -2, -1)), where i is imaginary i
+
 #make quad matrix [[I][op],[op][I]] and negative quad [[I][-op],[-op][I]]
+posQuad, negQuad = make_quad_ops(N)
+
 #step forward
-    #matrix multiply the negative quad by the FFT column vector
-    #linear algebra solve the pos_quad*newFFTvector = above-result for newFFTvector
-    #make seperate copies of the velocity_f and density_f components of newFFTvector
-    #inverse FFT the components and append the real parts of velocity and density to a log
+velDen = step_forward(
+#make seperate copies of the velocity_f and density_f components of newFFTvector
+#inverse FFT the components and append the real parts of velocity and density to a log
 #repeat stepping for num steps
 #plot the velocity and density logs in 3D
 #maybe make an animation
