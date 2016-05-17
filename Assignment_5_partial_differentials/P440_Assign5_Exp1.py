@@ -43,20 +43,24 @@ def make_operator(N,M):
 
 
 N = 10          #number of spatial steps per skin depth       
-M = 100         #number of temporal steps per period
-periods = 1   #number of periods
+M = 10         #number of temporal steps per period
+periods = 2   #number of periods
 skins = 10      #number of skin depths
 
 
 operatorCrank = make_operator(N*skins,M)
+
 thermal = [1.]*N*skins
 
 #simulation loop
 thermLog = []
 for i in range(M*periods):
+    plt.plot(np.linspace(0,skins,N*skins),thermal)
+    plt.show()    
     thermLog.append(thermal)
     thermal = np.dot(operatorCrank,thermal)
-
+    thermal[0] = 1. + math.sin(2.*math.pi*i)
+    thermal[-1] = 1.
 
 fig = plt.figure()
 ax = fig.add_subplot(111, projection='3d')
@@ -64,7 +68,7 @@ x = np.linspace(0,skins,N*skins)
 y = np.linspace(0,periods,M*periods)
 XX, YY = np.meshgrid(x,y)
 ZZ = thermLog
-print ZZ
+
 ax.plot_surface(XX, YY, ZZ, 
                 #cmap=cm.spectral
                )

@@ -39,7 +39,7 @@ def step_forward(velDen,posQuad,negQuad):
 
 L = 2.*math.pi  #set the x range to (0->2pi)
 N = 100        #number of spatial intervals and points (since it loops)
-steps = 100*5    #number of timesteps
+steps = 629    #number of timesteps
 stepSize = 0.01  #temporal step size
 
 #make initial velocity array in physical space
@@ -70,9 +70,28 @@ for i in range(steps):
     vel = np.fft.ifft(velF)
     den = np.fft.ifft(denF)
     velLog.append(vel.real)
+    
+#    plt.plot(np.linspace(0,L,N),vel.real)
+#    plt.ylim([-1,1])
+#    plt.xlim([0,L])
+#    plt.ylabel("Velocity")
+#    plt.xlabel("Position")    
+#    plt.savefig('frames/velocityImage'+str(i+1)+'.png',bbox_inches='tight')    
+#    plt.clf()
+#    
+#    plt.plot(np.linspace(0,L,N),den.real)
+#    plt.ylim([-1,1])
+#    plt.xlim([0,L])
+#    plt.ylabel("Density")
+#    plt.xlabel("Position")     
+#    plt.savefig('frames/densityImage'+str(i+1)+'.png',bbox_inches='tight')    
+#    plt.clf()
+    print i
     denLog.append(den.real)
     #step forward
     velDen = step_forward(velDen,posQuad,negQuad)
+
+
 
 #plot the velocity and density logs in 3D
 fig = plt.figure()
@@ -104,7 +123,6 @@ ax.set_ylabel('Time')
 ax.set_zlabel('Density')
 plt.show()
 
-#maybe make an animation
 
 
 
