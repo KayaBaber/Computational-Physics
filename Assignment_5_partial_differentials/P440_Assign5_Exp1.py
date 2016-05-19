@@ -37,29 +37,37 @@ def make_operator(N,M):
     negativeCrank = bandedCrank * (-1)
     bandedCrank[0] = [1] + [0]*(N-1)
     bandedCrank[-1] = [0]*(N-1) + [1]
-    invertedCrank = LA.inv(bandedCrank)
-    operatorCrank = invertedCrank.dot(negativeCrank)
-    return operatorCrank
+    return bandedCrank, negativeCrank
+    
 
-
-N = 10          #number of spatial steps per skin depth       
-M = 10         #number of temporal steps per period
-periods = 2   #number of periods
+def step_forward(thermal,posCrank,negCrank):
+    #matrix multiply the negative quad by the FFT column vector
+    RHS = np.dot(negCrank,thermal)
+    #linear algebra solve the pos_quad*newFFTvector = above-result for newFFTvector
+    newThermal = LA.tensorsolve(posCrank, RHS)
+    return newThermal
+    
+    
+N = 100          #number of spatial steps per skin depth       
+M = 100         #number of temporal steps per period
+periods = 2     #number of periods
 skins = 10      #number of skin depths
 
 
-operatorCrank = make_operator(N*skins,M)
+posCrank, negCrank = make_operator(N*skins,M)
 
 thermal = [1.]*N*skins
 
 #simulation loop
+topLog = []
 thermLog = []
 for i in range(M*periods):
-    plt.plot(np.linspace(0,skins,N*skins),thermal)
-    plt.show()    
+#    plt.plot(np.linspace(0,skins,N*skins),thermal)
+#    plt.show()    
     thermLog.append(thermal)
-    thermal = np.dot(operatorCrank,thermal)
-    thermal[0] = 1. + math.sin(2.*math.pi*i)
+    thermal = step_forward(thermal,posCrank,negCrank)
+    thermal[0] = 1.0 + math.sin(2.0*math.pi*(i/float(M)))
+    topLog.append(thermal[0])
     thermal[-1] = 1.
 
 fig = plt.figure()
@@ -76,3 +84,6 @@ ax.set_xlabel('Space')
 ax.set_ylabel('Time')
 ax.set_zlabel('Temperature')
 plt.show()
+
+#plt.plot(np.linspace(0,periods,M*periods),topLog)
+#plt.show() 

@@ -44,13 +44,19 @@ stepSize = 0.01  #temporal step size
 
 #make initial velocity array in physical space
 velPhysFlat = [0 + 0J]*N
+velPhysGauss = np.exp(-10 * ( (np.linspace(0,L,N+1)[:-1]-math.pi) ** 2)) + [0J]*N
+velPhysGaussL = np.exp(-10 * ( (np.linspace(0,L,N+1)[:-1]- 1.5*math.pi) ** 2)) + [0J]*N
+#velPhysSinGauss = np.multiply(np.sin((0.2*np.linspace(0,L,N+1)[:-1])*4),np.exp(-10*( (np.linspace(0,L,N+1)[:-1]-*math.pi) ** 2)))
 
 #make initial density array in physical space
+denPhysFlat = [0 + 0J]*N
 denPhysGauss = np.exp(-10 * ( (np.linspace(0,L,N+1)[:-1]-math.pi) ** 2)) + [0J]*N
+denPhysGaussR = np.exp(-10 * ( (np.linspace(0,L,N+1)[:-1]- 0.5*math.pi) ** 2)) + [0J]*N
+denPhysSinGauss = np.multiply(np.sin((np.linspace(0,L,N+1)[:-1])*4),np.exp(-1*((np.linspace(0,L,N+1)[:-1]-math.pi) ** 2)))
 
 #fft both to fourier space
-velF = np.fft.fft(velPhysFlat)
-denF = np.fft.fft(denPhysGauss)
+velF = np.fft.fft(denPhysFlat)
+denF = np.fft.fft(denPhysSinGauss)
 
 #make a column vector of density_f appended to velocity_f
 velDen = velF
@@ -71,21 +77,22 @@ for i in range(steps):
     den = np.fft.ifft(denF)
     velLog.append(vel.real)
     
-#    plt.plot(np.linspace(0,L,N),vel.real)
+    plt.plot(np.linspace(0,L,N),vel.real)
 #    plt.ylim([-1,1])
 #    plt.xlim([0,L])
 #    plt.ylabel("Velocity")
 #    plt.xlabel("Position")    
 #    plt.savefig('frames/velocityImage'+str(i+1)+'.png',bbox_inches='tight')    
 #    plt.clf()
-#    
-#    plt.plot(np.linspace(0,L,N),den.real)
-#    plt.ylim([-1,1])
-#    plt.xlim([0,L])
-#    plt.ylabel("Density")
-#    plt.xlabel("Position")     
-#    plt.savefig('frames/densityImage'+str(i+1)+'.png',bbox_inches='tight')    
-#    plt.clf()
+    
+    plt.plot(np.linspace(0,L,N),den.real)
+    plt.plot(np.linspace(0,L,N),den.real-vel.real)
+    plt.ylim([-1,1])
+    plt.xlim([0,L])
+    plt.ylabel("Density, Velocity, Difference")
+    plt.xlabel("Position")     
+    plt.savefig('frames/comboImage'+str(i+1)+'.png',bbox_inches='tight')    
+    plt.clf()
     print i
     denLog.append(den.real)
     #step forward
